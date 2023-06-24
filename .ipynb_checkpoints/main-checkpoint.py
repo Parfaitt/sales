@@ -1,30 +1,20 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb  6 09:56:29 2023
-Author: HP
-"""
-
 import numpy as np
 import pickle
 import streamlit as st
 import pandas as pd
 
-# Loading the saved model
-loaded_model = pickle.load(open('model.sav', 'rb'))
+# Loading the saved models
+model1 = pickle.load(open('model.sav', 'rb'))
+model2 = pickle.load(open('model2.sav', 'rb'))
+model3 = pickle.load(open('model3.sav', 'rb'))
+model4 = pickle.load(open('model4.sav', 'rb'))
 
 # Creating a function for Prediction
-def pred(ID, Demande_P1):
-    input_data = [ID, Demande_P1]
-    # Changing the input_data to numpy array
-    input_data_as_numpy_array = np.asarray(input_data)
-
-    # Reshape the array as we are predicting for one instance
-    input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
-
-    prediction = loaded_model.predict(input_data_reshaped)
-    print(prediction)
-
+def pred(model, ID, Demande):
+    input_data = np.array([[ID, Demande]], dtype='float')
+    prediction = model.predict(input_data)
     return prediction
+
 
 def main():
     def load_data():
@@ -45,22 +35,29 @@ def main():
         st.write(df_sample)
     
     # Giving a title
-    st.title("Application Web de prédiction de la vnete en fonction de la demande")
+    st.title("Application Web de prédiction de la vente en fonction de la demande")
     
     # Getting input from the user
-    ID = st.text_input('Le numéro du produit ')
-    Demande_P1 = st.text_input('La valeur de la demande')
+    ID = st.number_input('Le numéro du produit', min_value=1, max_value=4, step=1)
+    Demande = st.text_input('La valeur de la demande')
     
-    ID = pd.to_numeric(ID, errors='coerce')
-    Demande_P1 = pd.to_numeric(Demande_P1, errors='coerce')
-
     # Code for prediction
     diagnosis = ''
-    
+    if st.button("Prédire"):
+        if pd.notna(ID) and pd.notna(Demande):
+            if ID == 1:
+                diagnosis = pred(model1, ID, Demande)
+            elif ID == 2:
+                diagnosis = pred(model2, ID, Demande)
+            elif ID == 3:
+                diagnosis = pred(model3, ID, Demande)
+            elif ID == 4:
+                diagnosis = pred(model4, ID, Demande)
+            st.success(f"La prédiction pour le produit {ID} avec une demande de {Demande} est : {diagnosis}")
+        else:
+            st.error("Veuillez fournir une valeur valide pour le numéro du produit et la demande.")
+
     # Getting the input data from the user
-    if st.button("Prédire la vente de la demande :"):
-        diagnosis = pred(ID, Demande_P1)
-        st.success(diagnosis)
 
 if __name__ == '__main__':
     main()
