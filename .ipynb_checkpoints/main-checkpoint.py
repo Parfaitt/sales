@@ -7,7 +7,7 @@ import pandas as pd
 ventes1 = pickle.load(open('ventes.pkl', 'rb'))
 ventes2 = pickle.load(open('ventes2.pkl', 'rb'))
 ventes3 = pickle.load(open('ventes3.pkl', 'rb'))
-ventes4 = pickle.load(open('ventes3.pkl', 'rb'))
+ventes4 = pickle.load(open('ventes4.pkl', 'rb'))
 
 # Creating a function for Prediction
 def pred(ventes, ID, Demande):
@@ -52,7 +52,7 @@ def main():
             elif ID == 3:
                 diagnosis = pred(ventes3, ID, Demande)
             elif ID == 4:
-                diagnosis = pred(ventes1, ID, Demande)
+                diagnosis = pred(ventes4, ID, Demande)
             st.success(f"La prédiction pour le produit {ID} avec une demande de {Demande} est : {diagnosis}")
         else:
             st.error("Veuillez fournir une valeur valide pour le numéro du produit et la demande.")
