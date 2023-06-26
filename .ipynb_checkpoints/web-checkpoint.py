@@ -15,7 +15,6 @@ def pred(model, ID, Demande):
     prediction = model.predict(input_data)
     return prediction
 
-
 def main():
     def load_data():
         data = pd.read_csv("data.csv")
@@ -56,6 +55,23 @@ def main():
             st.success(f"La prédiction pour le produit {ID} avec une demande de {Demande} est : {diagnosis}")
         else:
             st.error("Veuillez fournir une valeur valide pour le numéro du produit et la demande.")
+    
+    # Adding new rows to the dataset
+    st.header("Ajouter de nouvelles données")
+    new_ID = st.number_input('Le numéro du produit (nouvelle donnée)', min_value=1, max_value=4, step=1)
+    new_Demande = st.text_input('La valeur de la demande (nouvelle donnée)')
+    new_Vente = st.number_input('La valeur de la vente (nouvelle donnée)')
+    
+    if st.button("Ajouter"):
+        if pd.notna(new_ID) and pd.notna(new_Demande) and pd.notna(new_Vente):
+            new_data = pd.DataFrame([[new_ID, new_Demande, new_Vente]], columns=['ID', 'Demande', 'Vente'])
+            df = pd.concat([df, new_data], ignore_index=True)
+            st.success("Nouvelles données ajoutées avec succès.")
+            st.write("Nouveau jeu de données :")
+            st.write(df)
+            df.to_csv("data.csv", index=False)
+        else:
+            st.error("Veuillez fournir des valeurs valides pour les nouvelles données.")
 
     # Getting the input data from the user
 

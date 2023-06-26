@@ -4,15 +4,15 @@ import streamlit as st
 import pandas as pd
 
 # Loading the saved models
-model1 = pickle.load(open('model.sav', 'rb'))
-model2 = pickle.load(open('model2.sav', 'rb'))
-model3 = pickle.load(open('model3.sav', 'rb'))
-model4 = pickle.load(open('model4.sav', 'rb'))
+ventes1 = pickle.load(open('ventes.pkl', 'rb'))
+ventes2 = pickle.load(open('ventes2.pkl', 'rb'))
+ventes3 = pickle.load(open('ventes3.pkl', 'rb'))
+ventes4 = pickle.load(open('ventes3.pkl', 'rb'))
 
 # Creating a function for Prediction
-def pred(model, ID, Demande):
-    input_data = np.array([[ID, Demande]], dtype='float')
-    prediction = model.predict(input_data)
+def pred(ventes, ID, Demande):
+    input_data = np.array([[Demande]], dtype='float')
+    prediction = ventes.predict(input_data)
     return prediction
 
 
@@ -28,7 +28,7 @@ def main():
     # PRÉDICTION DES VENTES 
     Il s'agit d'un projet d'apprentissage automatique de prédiction des ventes en fonction de la demande.
     
-    Auteur: Hamza El Kadiri
+    Auteur: Mostapha ASLOUJ
     ''')
     if st.sidebar.checkbox("Afficher les données brutes", False):
         st.subheader("Jeux de données brutes")
@@ -46,13 +46,13 @@ def main():
     if st.button("Prédire"):
         if pd.notna(ID) and pd.notna(Demande):
             if ID == 1:
-                diagnosis = pred(model1, ID, Demande)
+                diagnosis = pred(ventes1, ID, Demande)
             elif ID == 2:
-                diagnosis = pred(model2, ID, Demande)
+                diagnosis = pred(ventes2, ID, Demande)
             elif ID == 3:
-                diagnosis = pred(model3, ID, Demande)
+                diagnosis = pred(ventes3, ID, Demande)
             elif ID == 4:
-                diagnosis = pred(model4, ID, Demande)
+                diagnosis = pred(ventes1, ID, Demande)
             st.success(f"La prédiction pour le produit {ID} avec une demande de {Demande} est : {diagnosis}")
         else:
             st.error("Veuillez fournir une valeur valide pour le numéro du produit et la demande.")
